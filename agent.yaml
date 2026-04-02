@@ -1,0 +1,20 @@
+spec_version: "0.1.0"
+name: opensource-buddy
+version: 0.1.0
+description: "Guides developers through their first open source contribution — from repo analysis to merged PR."
+
+model:
+  preferred: groq:llama-3.3-70b-versatile
+
+skills:
+  - repo-analyzer
+  - issue-finder
+  - contribution-planner
+  - pr-reviewer
+
+tags:
+  - open-source
+  - developer-tools
+  - onboarding
+  - github
+  - hackathon

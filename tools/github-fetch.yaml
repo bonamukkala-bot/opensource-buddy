@@ -1,0 +1,112 @@
+name: github-fetch
+description: "Fetches public data from GitHub repositories including repo
+  metadata, file contents, open issues, and contributor information using
+  the GitHub REST API."
+
+version: "1.0.0"
+
+input_schema:
+  type: object
+  properties:
+    action:
+      type: string
+      description: "The action to perform"
+      enum:
+        - get_repo_info
+        - get_file_content
+        - list_issues
+        - get_issue
+        - get_contributors
+        - get_readme
+        - get_contributing
+    repo_url:
+      type: string
+      description: "Full GitHub repository URL e.g. https://github.com/owner/repo"
+    file_path:
+      type: string
+      description: "Path to a specific file in the repo e.g. src/index.js"
+    issue_number:
+      type: integer
+      description: "Specific issue number to fetch"
+    labels:
+      type: array
+      items:
+        type: string
+      description: "Filter issues by labels e.g. ['good first issue', 'help wanted']"
+    limit:
+      type: integer
+      description: "Maximum number of results to return"
+      default: 10
+  required:
+    - action
+    - repo_url
+
+output_schema:
+  type: object
+  properties:
+    success:
+      type: boolean
+      description: "Whether the API call succeeded"
+    data:
+      type: object
+      description: "The returned data from GitHub"
+    error:
+      type: string
+      description: "Error message if the call failed"
+    rate_limit_remaining:
+      type: integer
+      description: "GitHub API rate limit calls remaining"
+
+actions:
+  get_repo_info:
+    description: "Fetch basic repo metadata — name, description, language,
+      stars, forks, open issues count, license, topics"
+    endpoint: "GET /repos/{owner}/{repo}"
+
+  get_file_content:
+    description: "Fetch the raw content of a specific file in the repo"
+    endpoint: "GET /repos/{owner}/{repo}/contents/{file_path}"
+
+  list_issues:
+    description: "List open issues in the repo, optionally filtered by labels"
+    endpoint: "GET /repos/{owner}/{repo}/issues"
+    params:
+      state: open
+      sort: created
+      direction: desc
+
+  get_issue:
+    description: "Fetch full details of a specific issue by number"
+    endpoint: "GET /repos/{owner}/{repo}/issues/{issue_number}"
+
+  get_contributors:
+    description: "List top contributors to the repo"
+    endpoint: "GET /repos/{owner}/{repo}/contributors"
+
+  get_readme:
+    description: "Fetch and decode the repo README file"
+    endpoint: "GET /repos/{owner}/{repo}/readme"
+
+  get_contributing:
+    description: "Fetch the CONTRIBUTING.md file if it exists"
+    endpoint: "GET /repos/{owner}/{repo}/contents/CONTRIBUTING.md"
+
+constraints:
+  - Only fetch data from public repositories
+  - Never expose or log GitHub API tokens in output
+  - Respect GitHub API rate limits — max 60 requests/hour unauthenticated
+  - If rate limit is hit, wait and inform the developer
+  - Never attempt to write, edit, or delete any GitHub data
+  - Only read operations are permitted
+
+error_handling:
+  404:
+    message: "Repository or file not found. Check the URL and make sure
+      the repo is public."
+  403:
+    message: "GitHub API rate limit exceeded. Please wait a few minutes
+      and try again."
+  401:
+    message: "Authentication required. This repo may be private."
+  500:
+    message: "GitHub API is having issues. Please try again shortly."

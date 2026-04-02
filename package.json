@@ -1,0 +1,39 @@
+{
+  "name": "opensource-buddy",
+  "version": "0.1.0",
+  "description": "An AI agent that guides developers through their first open source contribution — from repo analysis to merged PR.",
+  "main": "demo.js",
+  "type": "module",
+  "scripts": {
+    "start": "node demo.js",
+    "demo": "node demo.js",
+    "validate": "npx gitagent validate",
+    "info": "npx gitagent info"
+  },
+  "dependencies": {
+    "clawless": "^0.4.13",
+    "dotenv": "^17.4.0",
+    "gitclaw": "^1.1.8",
+    "groq-sdk": "latest"
+  },
+  "keywords": [
+    "open-source",
+    "github",
+    "ai-agent",
+    "gitagent",
+    "gitclaw",
+    "contributor",
+    "hackathon",
+    "developer-tools",
+    "onboarding"
+  ],
+  "author": "Bonamukkala Charan Reddy",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+"scripts": {
+  "start": "node demo.js",
+  "deploy": "clawless deploy"
+}
