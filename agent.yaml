@@ -1,5 +1,5 @@
 spec_version: "0.1.0"
-name: my-agent
+name: opensource-buddy
 version: 0.1.0
 description: "Guides developers through their first open source contribution — from repo analysis to merged PR."
 
